@@ -6,8 +6,35 @@ module RCA(
 	output     c_out
 );
 
-/*
-	Write Your Design Here ~
-*/
-
+wire c_12;
+wire c_23;
+wire c_34;
+FA fa1(
+	.x(x[0]),
+	.y(y[0]),
+	.c_in(c_in),
+	.s(s[0]),
+	.c_out(c_12)
+);
+FA fa2(
+	.x(x[1]),
+	.y(y[1]),
+	.c_in(c_12),
+	.s(s[1]),
+	.c_out(c_23)
+);
+FA fa3(
+	.x(x[2]),
+	.y(y[2]),
+	.c_in(c_23),
+	.s(s[2]),
+	.c_out(c_34)
+);
+FA fa4(
+	.x(x[3]),
+	.y(y[3]),
+	.c_in(c_34),
+	.s(s[3]),
+	.c_out(c_out)
+);
 endmodule
