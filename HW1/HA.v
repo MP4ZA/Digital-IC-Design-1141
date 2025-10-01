@@ -5,8 +5,7 @@ module HA(
 	output c
 );
 
-/*
-	Write Your Design Here ~
-*/
+	assign s = x ^ y;
+	assign c = x & y;
 
 endmodule
