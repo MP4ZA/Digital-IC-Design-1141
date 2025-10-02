@@ -64,8 +64,25 @@ module Mul_Mod (
 
     wire [34:0] big1 = {row1, row2};
 
-    // // //
-    wire [25:0] pre_big2 = (V << 1) + V + V[23:1];
+    // // // wire [25:0] pre_big2 = (V << 1) + V + V[23:1];
+    wire [24:0] V_sll = (V << 1);
+    wire [63:0] adder3_s;
+    Adder64_RCA4 adder3(
+        .x({39'b0, V_sll}),
+        .y({40'b0, V}),
+        .c_in(1'b0),
+        .s(adder3_s),
+        .c_out()
+    );
+    wire [63:0] adder4_s;
+    Adder64_RCA4 adder4(
+        .x(adder3_s),
+        .y({41'b0, V[23:1]}),
+        .c_in(1'b0),
+        .s(adder4_s),
+        .c_out()
+    );
+    wire [25:0] pre_big2 = adder4_s[25:0];
     // // //
 
     wire [13:0] big2 = pre_big2[25:12];
