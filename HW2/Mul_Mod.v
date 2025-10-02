@@ -35,67 +35,34 @@ module Mul_Mod (
     wire [39:0] mult2 = A * B[16:0];
     // // // wire [45:0] U = mult1 + mult2;
     wire [63:0] adder1_s;
-    Adder64_RCA4 adder1(
-        .x({18'b0, mult1}),
-        .y({24'b0, mult2}),
-        .c_in(1'b0),
-        .s(adder1_s),
-        .c_out()
-    );
+    Adder64_RCA4 adder1(.x({18'b0, mult1}), .y({24'b0, mult2}), .c_in(1'b0), .s(adder1_s), .c_out());
     wire [45:0] U = adder1_s[45:0];
     // // //
     wire [23:0] Y = U[23:0];
-
     wire [23:0] V = U[45:22];
     wire [24:0] row1;
     wire [9:0]  row2;
     // // // assign row1 = V + V[23:10];
     wire [63:0] adder2_s;
-    Adder64_RCA4 adder2(
-        .x({40'b0, V}),
-        .y({50'b0, V[23:10]}),
-        .c_in(1'b0),
-        .s(adder2_s),
-        .c_out()
-    );
+    Adder64_RCA4 adder2(.x({40'b0, V}), .y({50'b0, V[23:10]}), .c_in(1'b0), .s(adder2_s), .c_out());
     assign row1 = adder2_s[24:0];
     // // //
     assign row2 = V[9:0];
-
     wire [34:0] big1 = {row1, row2};
 
     // // // wire [25:0] pre_big2 = (V << 1) + V + V[23:1];
     wire [24:0] V_sll = (V << 1);
     wire [63:0] adder3_s;
-    Adder64_RCA4 adder3(
-        .x({39'b0, V_sll}),
-        .y({40'b0, V}),
-        .c_in(1'b0),
-        .s(adder3_s),
-        .c_out()
-    );
     wire [63:0] adder4_s;
-    Adder64_RCA4 adder4(
-        .x(adder3_s),
-        .y({41'b0, V[23:1]}),
-        .c_in(1'b0),
-        .s(adder4_s),
-        .c_out()
-    );
+    Adder64_RCA4 adder3(.x({39'b0, V_sll}), .y({40'b0, V}), .c_in(1'b0), .s(adder3_s), .c_out());
+    Adder64_RCA4 adder4(.x(adder3_s), .y({41'b0, V[23:1]}), .c_in(1'b0), .s(adder4_s), .c_out());
     wire [25:0] pre_big2 = adder4_s[25:0];
     // // //
-
     wire [13:0] big2 = pre_big2[25:12];
 
     // // // wire [34:0] pre_W = big1 + big2;
     wire [63:0] adder5_s;
-    Adder64_RCA4 adder5(
-        .x({29'b0, big1}),
-        .y({50'b0, big2}),
-        .c_in(1'b0),
-        .s(adder5_s),
-        .c_out()
-    );
+    Adder64_RCA4 adder5(.x({29'b0, big1}), .y({50'b0, big2}), .c_in(1'b0), .s(adder5_s), .c_out());
     wire [34:0] pre_W = adder5_s[34:0];
     // // //
 
